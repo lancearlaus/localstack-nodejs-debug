@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Description: Allows the cdk command to be redirected by defining the CDK environment variable
+# For example, setting CDK=cdklocal to redirect cdk operations to localstack
+
+command "${CDK:-cdk}" "$@"

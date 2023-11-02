@@ -1,0 +1,110 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Wait for LocalStack Lambda Nodejs Debugger Server",
+      "type": "shell",
+      "command": "while [[ -z $(docker ps | grep :9229) ]]; do sleep 1; done; sleep 1;"
+    },
+    {
+      "label": "Start LocalStack",
+      "type": "shell",
+      "command": "localstack start",
+      "isBackground": true,
+      "runOptions": {
+        "instanceLimit": 1,
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": true
+      },
+    },
+    {
+      "label": "Start LocalStack (Lambda Debugger)",
+      "type": "shell",
+      "command": "localstack start",
+      "options": {
+        "env": {
+          // See: https://docs.localstack.cloud/user-guide/tools/lambda-tools/debugging/#debugging-nodejs-lambdas
+          "LAMBDA_DOCKER_FLAGS": "-e NODE_OPTIONS=\"--enable-source-maps --inspect-brk=0.0.0.0:9229\" -p 9229:9229"
+        },
+      },
+      "isBackground": true,
+      "runOptions": {
+        "instanceLimit": 1,
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": true
+      },
+    },
+    {
+      "label": "Stop LocalStack",
+      "type": "shell",
+      "command": "localstack stop",
+      "presentation": {
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+      },
+    },
+    {
+      "label": "Wait for LocalStack",
+      "type": "shell",
+      "command": "localstack wait",
+      "presentation": {
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+      },
+    },
+    {
+      "label": "Bootstrap LocalStack",
+      "type": "shell",
+      "command": "eval $(direnv export bash) && npm run bootstrap",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/aws/localstack",
+      },
+      "dependsOn": [
+        "Wait for LocalStack",
+      ],
+    },
+    {
+      "label": "Deploy to LocalStack",
+      "type": "shell",
+      "command": "eval $(direnv export bash) && npm run cdk -- deploy --all --require-approval never",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/aws/localstack",
+      },
+      "dependsOn": [
+        "Bootstrap LocalStack",
+      ],
+    },
+  ]
+}
