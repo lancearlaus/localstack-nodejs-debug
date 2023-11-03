@@ -109,8 +109,7 @@
   },
   "include": [
     "app/**/*.ts",
-    "constructs/**/*.ts",
-    "service/**/*.ts",
+    "src/**/*.ts",
     "test/**/*.ts",
     "*.ts",
   ],

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { App, Environment } from 'aws-cdk-lib';
-import { HelloServiceStack } from '../service/index.js';
+import { LocalstackNodejsDebugStack } from '../src/stack.js';
 
 const env: Environment =  {
   account: process.env.CDK_DEFAULT_ACCOUNT,
@@ -9,5 +9,4 @@ const env: Environment =  {
 
 const app = new App();
 
-new HelloServiceStack(app, { env });
-//new BankUserDataStack(app, { env });
+new LocalstackNodejsDebugStack(app, { env });
