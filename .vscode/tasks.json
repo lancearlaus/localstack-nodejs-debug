@@ -12,9 +12,54 @@
       "label": "Start LocalStack",
       "type": "shell",
       "command": "localstack start",
-      "isBackground": true,
       "runOptions": {
         "instanceLimit": 1,
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "localstack",
+        "fileLocation": "absolute",
+        "pattern": {
+          "regexp": "❌ (\\w+): (.*)$",
+          "severity": 1,
+          "message": 2,
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "^Ready.",
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": true
+      },
+    },
+    {
+      "label": "Ensure LocalStack",
+      "type": "shell",
+      "command": "localstack start || true",
+      "runOptions": {
+        "instanceLimit": 1,
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "localstack",
+        "fileLocation": "absolute",
+        "pattern": {
+          "regexp": "❌ (\\w+): (.*)$",
+          "severity": 1,
+          "message": 2,
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "^Ready.",
+        }
       },
       "presentation": {
         "echo": true,
@@ -35,9 +80,23 @@
           "LAMBDA_DOCKER_FLAGS": "-e NODE_OPTIONS=\"--enable-source-maps --inspect-brk=0.0.0.0:9229\" -p 9229:9229"
         },
       },
-      "isBackground": true,
       "runOptions": {
         "instanceLimit": 1,
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "localstack",
+        "fileLocation": "absolute",
+        "pattern": {
+          "regexp": "❌ (\\w+): (.*)$",
+          "severity": 1,
+          "message": 2,
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "^Ready.",
+        }
       },
       "presentation": {
         "echo": true,
@@ -67,6 +126,9 @@
         "focus": false,
         "panel": "shared",
       },
+      "dependsOn": [
+        "Ensure LocalStack",
+      ],
     },
     {
       "label": "Bootstrap LocalStack",
@@ -78,7 +140,7 @@
         "focus": false,
         "panel": "shared",
         "showReuseMessage": true,
-        "clear": false
+        "clear": true,
       },
       "options": {
         "cwd": "${workspaceFolder}/aws/localstack",
